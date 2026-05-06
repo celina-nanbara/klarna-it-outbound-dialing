@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Italy Outbound Dialling — Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #181c27;
+    --surface-2: #1e2436;
+    --border: #2a3045;
+    --border-light: #323b55;
+    --text: #e8ecf4;
+    --text-2: #8b94ae;
+    --text-3: #5a6480;
+    --teal: #22c89a;
+    --teal-dim: rgba(34,200,154,0.12);
+    --amber: #f5a623;
+    --amber-dim: rgba(245,166,35,0.12);
+    --coral: #e8513a;
+    --coral-dim: rgba(232,81,58,0.12);
+    --blue: #4d8ef0;
+    --blue-dim: rgba(77,142,240,0.12);
+    --purple: #9b6dff;
+    --purple-dim: rgba(155,109,255,0.12);
+    --green: #3dd68c;
+    --red: #e05252;
+    --warn: #f5a623;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* ── HEADER ── */
+  header {
+    padding: 28px 40px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--surface);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .header-left h1 {
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    color: var(--text);
+  }
+
+  .header-left .subtitle {
+    font-size: 12px;
+    color: var(--text-3);
+    margin-top: 2px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  #data-freshness {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-3);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    border-radius: 6px;
+  }
+
+  #data-freshness .freshness-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--teal);
+    margin-right: 7px;
+    vertical-align: middle;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .refresh-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--teal);
+    background: var(--teal-dim);
+    border: 1px solid rgba(34,200,154,0.25);
+    padding: 7px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .refresh-btn:hover { background: rgba(34,200,154,0.2); border-color: rgba(34,200,154,0.4); }
+  .refresh-btn:active { transform: scale(0.98); }
+
+  .refresh-icon { font-size: 14px; display: inline-block; transition: transform 0.4s; }
+  .refresh-btn.spinning .refresh-icon { animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── BANNER ── */
+  #missing-banner {
+    display: none;
+    background: rgba(245,166,35,0.08);
+    border-bottom: 1px solid rgba(245,166,35,0.2);
+    padding: 10px 40px;
+    font-size: 12px;
+    color: var(--amber);
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ── LAYOUT ── */
+  main { padding: 32px 40px 60px; max-width: 1400px; margin: 0 auto; }
+
+  .section { margin-bottom: 40px; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-3);
+  }
+
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── KPI TILES ── */
+  .kpi-grid {
+    display: grid;
+    gap: 12px;
+  }
+
+  .kpi-grid-4 { grid-template-columns: repeat(4, 1fr); }
+  .kpi-grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .kpi-grid-2 { grid-template-columns: repeat(2, 1fr); }
+
+  .kpi {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    transition: border-color 0.15s;
+  }
+
+  .kpi:hover { border-color: var(--border-light); }
+
+  .kpi-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+  }
+
+  .kpi-value {
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.5px;
+    line-height: 1;
+    margin-bottom: 5px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .kpi-sub {
+    font-size: 11px;
+    color: var(--text-3);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .kpi-accent-teal .kpi-value { color: var(--teal); }
+  .kpi-accent-amber .kpi-value { color: var(--amber); }
+  .kpi-accent-blue .kpi-value { color: var(--blue); }
+
+  /* ── GRIDS ── */
+  .grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid-3col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 22px;
+  }
+
+  .card-title {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 16px;
+  }
+
+  /* ── TABLES ── */
+  .table-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+
+  thead th {
+    background: var(--surface-2);
+    color: var(--text-3);
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    padding: 10px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  tbody td {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+
+  tbody tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .td-muted { color: var(--text-2) !important; font-size: 12px; }
+  .td-mono { font-family: 'DM Mono', monospace; font-size: 12px; }
+
+  /* ── STATUS PILLS ── */
+  .pill {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .pill-ok      { background: rgba(61,214,140,0.12); color: #3dd68c; border: 1px solid rgba(61,214,140,0.25); }
+  .pill-warn    { background: rgba(245,166,35,0.12);  color: #f5a623; border: 1px solid rgba(245,166,35,0.25); }
+  .pill-bad     { background: rgba(224,82,82,0.12);   color: #e05252; border: 1px solid rgba(224,82,82,0.25); }
+  .pill-missing { background: rgba(224,82,82,0.08);   color: #e05252; border: 1px solid rgba(224,82,82,0.15); }
+  .pill-today   { background: rgba(77,142,240,0.12);  color: #4d8ef0; border: 1px solid rgba(77,142,240,0.25); }
+
+  /* ── BAR CHART ── */
+  .bar-list { display: flex; flex-direction: column; gap: 10px; }
+
+  .bar-row { display: flex; align-items: center; gap: 10px; }
+
+  .bar-label {
+    font-size: 12px;
+    color: var(--text-2);
+    width: 110px;
+    flex-shrink: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 7px;
+    background: var(--surface-2);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .bar-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text);
+    width: 46px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* ── FUNNEL ── */
+  .funnel-list { display: flex; flex-direction: column; gap: 8px; }
+
+  .funnel-row { display: flex; align-items: center; gap: 10px; }
+
+  .funnel-label {
+    font-size: 12px;
+    color: var(--text-2);
+    width: 180px;
+    flex-shrink: 0;
+  }
+
+  .funnel-n {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text);
+    width: 52px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .funnel-pct {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-3);
+    width: 42px;
+    flex-shrink: 0;
+  }
+
+  /* ── NOTE ── */
+  .note {
+    font-size: 11px;
+    color: var(--text-3);
+    margin-top: 12px;
+    font-style: italic;
+    line-height: 1.6;
+  }
+
+  .alert-warn {
+    background: rgba(245,166,35,0.06);
+    border-left: 3px solid var(--amber);
+    padding: 10px 14px;
+    font-size: 12px;
+    color: var(--amber);
+    border-radius: 0 6px 6px 0;
+    margin-top: 12px;
+    line-height: 1.6;
+  }
+
+  /* ── LOADING ── */
+  #loading-screen {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    gap: 20px;
+  }
+
+  .loader-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-2);
+  }
+
+  .loader-bar {
+    width: 200px;
+    height: 2px;
+    background: var(--surface-2);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .loader-fill {
+    height: 100%;
+    background: var(--teal);
+    border-radius: 2px;
+    animation: load 1.4s ease-in-out infinite;
+  }
+
+  @keyframes load {
+    0% { width: 0%; margin-left: 0; }
+    50% { width: 60%; margin-left: 20%; }
+    100% { width: 0%; margin-left: 100%; }
+  }
+
+  .loader-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-3);
+  }
+
+  #error-screen {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    gap: 16px;
+    text-align: center;
+    padding: 40px;
+  }
+
+  .error-icon { font-size: 40px; }
+
+  .error-title { font-size: 18px; font-weight: 600; color: var(--text); }
+
+  .error-body {
+    font-size: 13px;
+    color: var(--text-2);
+    max-width: 520px;
+    line-height: 1.7;
+  }
+
+  .error-files {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 16px 20px;
+    border-radius: 8px;
+    text-align: left;
+    color: var(--teal);
+    line-height: 2;
+    max-width: 500px;
+    width: 100%;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1100px) {
+    .kpi-grid-4 { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 800px) {
+    main { padding: 20px; }
+    header { padding: 16px 20px; flex-direction: column; gap: 12px; align-items: flex-start; }
+    .kpi-grid-3, .kpi-grid-4 { grid-template-columns: 1fr 1fr; }
+    .grid-2col { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div id="loading-screen">
+  <div class="loader-title">Loading dashboard</div>
+  <div class="loader-bar"><div class="loader-fill"></div></div>
+  <div class="loader-sub" id="loading-sub">Reading CSV files…</div>
+</div>
+
+<!-- ERROR -->
+<div id="error-screen">
+  <div class="error-icon">⚠</div>
+  <div class="error-title">CSV files not found</div>
+  <div class="error-body">
+    The dashboard couldn't load its data files. Make sure all CSV files are in the <strong>same folder</strong> as this HTML file, then refresh.
+  </div>
+  <div class="error-files" id="error-file-list"></div>
+  <div class="error-body" style="font-size:12px; color: var(--text-3);">
+    If you're viewing this from Google Drive, open the file in your browser directly (not via Drive preview).
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-left">
+    <h1>Italy Outbound Dialling</h1>
+    <div class="subtitle">Klarna Italy · Initiative start 15 Apr 2026</div>
+  </div>
+  <div class="header-right">
+    <div id="data-freshness"><span class="freshness-dot"></span><span id="freshness-text">Loading…</span></div>
+    <button class="refresh-btn" onclick="loadAllData()">
+      <span class="refresh-icon">↻</span> Refresh
+    </button>
+  </div>
+</header>
+
+<!-- MISSING DATA BANNER -->
+<div id="missing-banner">⚠ Some call result dates are missing or partial — see the scheduled vs actual table below for details.</div>
+
+<!-- MAIN -->
+<main id="main-content" style="display:none">
+
+  <!-- 1. CALL ACTIVITY -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-label">📞 Call activity & volume</span>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="kpi-grid kpi-grid-4" style="margin-bottom:12px">
+      <div class="kpi"><div class="kpi-label">Total calls</div><div class="kpi-value" id="kpi-total-calls">—</div><div class="kpi-sub" id="kpi-total-calls-sub">—</div></div>
+      <div class="kpi"><div class="kpi-label">Total scheduled</div><div class="kpi-value" id="kpi-total-scheduled">—</div><div class="kpi-sub" id="kpi-total-scheduled-sub">—</div></div>
+      <div class="kpi kpi-accent-teal"><div class="kpi-label">Calls / scheduled</div><div class="kpi-value" id="kpi-calls-pct">—</div><div class="kpi-sub">of all scheduled cases called</div></div>
+      <div class="kpi"><div class="kpi-label">Unique customers dialled</div><div class="kpi-value" id="kpi-unique-customers">—</div><div class="kpi-sub" id="kpi-unique-sub">—</div></div>
+    </div>
+
+    <div class="kpi-grid kpi-grid-4" style="margin-bottom:12px">
+      <div class="kpi"><div class="kpi-label">Avg calls per day</div><div class="kpi-value" id="kpi-calls-per-day">—</div><div class="kpi-sub" id="kpi-days-active-sub">—</div></div>
+      <div class="kpi"><div class="kpi-label">Dialling coverage</div><div class="kpi-value" id="kpi-coverage">—</div><div class="kpi-sub">of eligible open portfolio</div></div>
+      <div class="kpi"><div class="kpi-label">Active agents</div><div class="kpi-value" id="kpi-agents">—</div><div class="kpi-sub">across all sessions</div></div>
+      <div class="kpi"><div class="kpi-label">Avg attempts / customer</div><div class="kpi-value" id="kpi-attempts">—</div><div class="kpi-sub">before contact or abandonment</div></div>
+    </div>
+
+    <!-- Scheduled vs Actual table -->
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Scheduled</th>
+            <th>Calls made</th>
+            <th>Unique customers</th>
+            <th>Calls / scheduled</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="scheduled-table-body">
+          <tr><td colspan="6" class="td-muted" style="text-align:center;padding:24px">Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 2. CONTACT QUALITY -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-label">📊 Contact & connection quality</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="grid-2col">
+      <div class="card">
+        <div class="card-title">Call disposition (from bronze wrapup codes)</div>
+        <div class="bar-list" id="contact-bars"></div>
+        <div class="note" id="contact-note">—</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Best contact windows (min. 30 calls)</div>
+        <div class="bar-list" id="best-times-bars"></div>
+        <div class="note">Contact rate by hour and day. Top 5 shown.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. FUNNEL -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-label">🔁 Customer journey funnel</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Klarna Italy dialled customers</div>
+      <div class="funnel-list" id="funnel-rows"></div>
+      <div class="note" id="funnel-note">—</div>
+    </div>
+  </div>
+
+  <!-- 4. RECOVERY -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-label">💰 Recovery & financial impact</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="kpi-grid kpi-grid-4">
+      <div class="kpi kpi-accent-teal"><div class="kpi-label">Total recovered (dialled)</div><div class="kpi-value" id="kpi-recovered">—</div><div class="kpi-sub">payments table · all dialled customers</div></div>
+      <div class="kpi"><div class="kpi-label">Recovery rate (dialled)</div><div class="kpi-value" id="kpi-recovery-rate">—</div><div class="kpi-sub">all dialled customers</div></div>
+      <div class="kpi kpi-accent-blue"><div class="kpi-label">Committed rate (dialled)</div><div class="kpi-value" id="kpi-committed">—</div><div class="kpi-sub">incl. scheduled future payments</div></div>
+      <div class="kpi"><div class="kpi-label">Avg payment (48h post-call)</div><div class="kpi-value" id="kpi-avg-payment">—</div><div class="kpi-sub" id="kpi-avg-payment-sub">—</div></div>
+    </div>
+  </div>
+
+  <!-- 5. PAYMENT PLANS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-label">📅 Payment plan outcomes</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="kpi-grid kpi-grid-3">
+      <div class="kpi"><div class="kpi-label">Plan setup rate</div><div class="kpi-value" id="kpi-plan-rate">—</div><div class="kpi-sub" id="kpi-plan-sub">—</div></div>
+      <div class="kpi kpi-accent-teal"><div class="kpi-label">Plans active / finished</div><div class="kpi-value" id="kpi-plans-active">—</div><div class="kpi-sub" id="kpi-plans-active-sub">—</div></div>
+      <div class="kpi"><div class="kpi-label">Breakage rate</div><div class="kpi-value" id="kpi-breakage">—</div><div class="kpi-sub" id="kpi-breakage-sub">—</div></div>
+    </div>
+  </div>
+
+  <!-- 6. SEGMENTATION -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-label">🎯 Segmentation: contact rate by debt band</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Debt band</th>
+            <th>Dialled</th>
+            <th>Contacted</th>
+            <th>Contact rate</th>
+            <th style="width:200px">Rate</th>
+          </tr>
+        </thead>
+        <tbody id="segmentation-table-body"></tbody>
+      </table>
+    </div>
+    <div class="note">Contact rate rises with debt size — consider weighting the call list toward €250+ cases.</div>
+  </div>
+
+  <!-- 7. CHANNEL INTERACTION -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-label">📬 Channel interaction</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="kpi-grid kpi-grid-2">
+      <div class="kpi"><div class="kpi-label">Portal visit after call</div><div class="kpi-value" id="kpi-portal-visit">—</div><div class="kpi-sub" id="kpi-portal-visit-sub">—</div></div>
+      <div class="kpi"><div class="kpi-label">Inbound response after call</div><div class="kpi-value" id="kpi-inbound">—</div><div class="kpi-sub" id="kpi-inbound-sub">—</div></div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div style="border-top: 1px solid var(--border); padding-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+    <div style="font-size: 11px; color: var(--text-3); font-family: 'DM!Mono', monospace;" id="footer-updated">—</div>
+    <div style="font-size: 11px; color: var(--text-3);">Klarna Italy · <span style="color: var(--text-3);">org_zdlYQmK6kmyGCgQak2Vwre51</span> · <span style="color: var(--text-3);">org_Z4mEyPwjvWp2T86qkodKeaNB</span></div>
+  </div>
+
+</main>
+
+<script>
+// ─────────────────────────────────────────────
+// CSV FILE NAMES — these must match exactly what
+// Cowork saves to the folder each morning
+// ─────────────────────────────────────────────
+const CSV_FILES = {
+  activity:      'q1_activity.csv',
+  scheduled:     'q2_scheduled.csv',
+  contact:       'q3_contact.csv',
+  best_times:    'q7_best_times.csv',
+  funnel:        'q4_funnel.csv',
+  recovery:      'q5_recovery.csv',
+  plans:         'q6_plans.csv',
+  segmentation:  'q8_segmentation.csv',
+  channel:       'q9_channel.csv',
+};
+
+// ─────────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────────
+function fmt(n, decimals = 0) {
+  if (n == null || n === '' || isNaN(n)) return '—';
+  const num = parseFloat(n);
+  if (decimals > 0) return num.toLocaleString('en-GB', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+  return Math.round(num).toLocaleString('en-GB');
+}
+
+function fmtEuro(n, decimals = 0) {
+  if (n == null || n === '' || isNaN(n)) return '—';
+  return '€' + fmt(n, decimals);
+}
+
+function fmtPct(n) {
+  if (n == null || n === '' || isNaN(n)) return '—';
+  return parseFloat(n).toFixed(1) + '%';
+}
+
+function parseCSV(file) {
+  return new Promise((resolve, reject) => {
+    Papa.parse(file, {
+      header: true,
+      dynamicTyping: true,
+      skipEmptyLines: true,
+      complete: r => resolve(r.data),
+      error: reject
+    });
+  });
+}
+
+async function fetchCSV(filename) {
+  const response = await fetch(filename);
+  if (!response.ok) throw new Error(`${filename} not found`);
+  const text = await response.text();
+  return new Promise((resolve, reject) => {
+    Papa.parse(text, {
+      header: true,
+      dynamicTyping: true,
+      skipEmptyLines: true,
+      complete: r => resolve(r.data),
+      error: reject
+    });
+  });
+}
+
+function barHtml(pct, color) {
+  return `<div class="bar-track"><div class="bar-fill" style="width:${Math.min(100, pct)}%;background:${color}"></div></div>`;
+}
+
+function statusPill(row) {
+  const calls = parseFloat(row.total_calls) || 0;
+  const scheduled = parseFloat(row.scheduled_cases) || 0;
+  if (!calls || calls === 0) {
+    if (row.schedule_date === new Date().toISOString().slice(0,10)) return '<span class="pill pill-today">today</span>';
+    return '<span class="pill pill-missing">missing</span>';
+  }
+  const pct = calls / scheduled;
+  if (pct >= 0.9) return '<span class="pill pill-ok">complete</span>';
+  if (pct >= 0.5) return '<span class="pill pill-warn">partial</span>';
+  return '<span class="pill pill-bad">low</span>';
+}
+
+// ─────────────────────────────────────────────
+// RENDER FUNCTIONS
+// ─────────────────────────────────────────────
+function renderActivity(data) {
+  if (!data || !data.length) return;
+  const r = data[0];
+  document.getElementById('kpi-total-calls').textContent    = fmt(r.total_calls);
+  document.getElementById('kpi-total-calls-sub').textContent = `excl. dates with missing results`;
+  document.getElementById('kpi-total-scheduled').textContent = fmt(r.total_scheduled);
+  document.getElementById('kpi-total-scheduled-sub').textContent = `from comms_scheduler`;
+  document.getElementById('kpi-calls-pct').textContent      = fmtPct(r.calls_per_scheduled_pct);
+  document.getElementById('kpi-unique-customers').textContent = fmt(r.unique_customers_called);
+  document.getElementById('kpi-unique-sub').textContent     = `${fmtPct(r.avg_attempts_per_customer)} attempts per customer avg`;
+  document.getElementById('kpi-calls-per-day').textContent  = fmt(r.avg_calls_per_day);
+  document.getElementById('kpi-days-active-sub').textContent = `${fmt(r.days_active)} active days`;
+  document.getElementById('kpi-coverage').textContent       = fmtPct(r.dialling_coverage_pct);
+  document.getElementById('kpi-agents').textContent         = fmt(r.active_agents);
+  document.getElementById('kpi-attempts').textContent       = fmt(r.avg_attempts_per_customer, 2);
+
+  // Freshness
+  const today = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  document.getElementById('freshness-text').textContent = `Data refreshed ${today}`;
+  document.getElementById('footer-updated').textContent = `Last updated: ${today} · ${fmt(r.total_calls)} calls tracked`;
+}
+
+function renderScheduled(data) {
+  if (!data || !data.length) return;
+  const tbody = document.getElementById('scheduled-table-body');
+  let hasMissing = false;
+  let html = '';
+  let totalScheduled = 0, totalCalls = 0, totalUnique = 0;
+
+  data.forEach(row => {
+    const pct = row.total_calls && row.scheduled_cases
+      ? ((row.total_calls / row.scheduled_cases) * 100).toFixed(1) + '%'
+      : '—';
+    const calls = row.total_calls || 0;
+    const unique = row.unique_customers || 0;
+    if (!calls) hasMissing = true;
+    totalScheduled += row.scheduled_cases || 0;
+    totalCalls += calls;
+    totalUnique += unique;
+
+    html += `<tr>
+      <td class="td-mono">${row.schedule_date}</td>
+      <td class="td-muted">${fmt(row.scheduled_cases)}</td>
+      <td class="td-muted">${calls ? fmt(calls) : '—'}</td>
+      <td class="td-muted">${unique ? fmt(unique) : '—'}</td>
+      <td class="td-mono">${calls ? pct : '—'}</td>
+      <td>${statusPill(row)}</td>
+    </tr>`;
+  });
+
+  // Totals row
+  const totalPct = totalScheduled ? ((totalCalls / totalScheduled) * 100).toFixed(1) + '%' : '—';
+  html += `<tr style="border-top: 2px solid var(--border-light)">
+    <td style="font-weight:600">Total</td>
+    <td class="td-mono">${fmt(totalScheduled)}</td>
+    <td class="td-mono">${fmt(totalCalls)}</td>
+    <td class="td-mono">${fmt(totalUnique)}</td>
+    <td class="td-mono">${totalPct}</td>
+    <td></td>
+  </tr>`;
+
+  tbody.innerHTML = html;
+  if (hasMissing) document.getElementById('missing-banner').style.display = 'block';
+}
+
+function renderContact(data) {
+  if (!data || !data.length) return;
+  const r = data[0];
+  const bars = [
+    { label: 'Contact rate', val: r.contact_rate_pct, color: 'var(--teal)' },
+    { label: 'RPC rate',     val: r.rpc_rate_pct,     color: 'var(--blue)' },
+    { label: 'Voicemail',    val: r.voicemail_rate_pct, color: 'var(--amber)' },
+    { label: 'Unreachable',  val: r.unreachable_rate_pct, color: 'var(--coral)' },
+    { label: 'Unanswered',   val: 100 - (r.contact_rate_pct + r.voicemail_rate_pct + r.unreachable_rate_pct), color: 'var(--border-light)' },
+  ];
+  const max = Math.max(...bars.map(b => parseFloat(b.val) || 0));
+  document.getElementById('contact-bars').innerHTML = bars.map(b => `
+    <div class="bar-row">
+      <div class="bar-label">${b.label}</div>
+      ${barHtml(((parseFloat(b.val)||0) / max) * 100, b.color)}
+      <div class="bar-val">${fmtPct(b.val)}</div>
+    </div>`).join('');
+
+  const rpcOfAnswered = r.answered ? ((r.rpc_calls / r.answered) * 100).toFixed(1) : '—';
+  document.getElementById('contact-note').textContent =
+    `${fmt(r.answered)} contacted · ${fmt(r.rpc_calls)} RPC · ${fmt(r.voicemail)} voicemail · ${fmt(r.unreachable)} unreachable · RPC rate as % of answered: ${rpcOfAnswered}%`;
+}
+
+function renderBestTimes(data) {
+  if (!data || !data.length) return;
+  const top5 = data.slice(0, 5);
+  const max = Math.max(...top5.map(r => parseFloat(r.contact_rate_pct) || 0));
+  document.getElementById('best-times-bars').innerHTML = top5.map(r => `
+    <div class="bar-row">
+      <div class="bar-label">${r.day_of_week ? r.day_of_week.slice(0,3) : ''} ${r.call_hour != null ? String(r.call_hour).padStart(2,'0') + ':00' : ''}</div>
+      ${barHtml(((parseFloat(r.contact_rate_pct)||0) / max) * 100, 'var(--teal)')}
+      <div class="bar-val">${fmtPct(r.contact_rate_pct)}</div>
+    </div>`).join('');
+}
+
+function renderFunnel(data) {
+  if (!data || !data.length) return;
+  const r = data[0];
+  const steps = [
+    { label: 'Dialled',                 n: r.dialled,              pct: 100,    color: 'var(--purple)' },
+    { label: 'Contacted (answered)',     n: r.contacted,            pct: r.dialled ? (r.contacted / r.dialled * 100) : 0, color: 'var(--purple)' },
+    { label: 'Engaged post-contact',    n: r.engaged_post_contact, pct: r.dialled ? (r.engaged_post_contact / r.dialled * 100) : 0, color: 'var(--blue)' },
+    { label: 'Paid post-contact',       n: r.paid_post_contact,    pct: r.dialled ? (r.paid_post_contact / r.dialled * 100) : 0, color: 'var(--teal)' },
+    { label: 'Plan set up post-contact',n: r.plan_post_contact,    pct: r.dialled ? (r.plan_post_contact / r.dialled * 100) : 0, color: 'var(--teal)' },
+  ];
+  document.getElementById('funnel-rows').innerHTML = steps.map(s => `
+    <div class="funnel-row">
+      <div class="funnel-label">${s.label}</div>
+      <div class="bar-track" style="flex:1"><div class="bar-fill" style="width:${s.pct.toFixed(1)}%;background:${s.color}"></div></div>
+      <div class="funnel-n">${fmt(s.n)}</div>
+      <div class="funnel-pct">${s.pct.toFixed(1)}%</div>
+    </div>`).join('');
+
+  const c2e = r.contacted ? (r.engaged_post_contact / r.contacted * 100).toFixed(1) : '—';
+  const c2p = r.contacted ? (r.paid_post_contact / r.contacted * 100).toFixed(1) : '—';
+  const c2pl = r.contacted ? (r.plan_post_contact / r.contacted * 100).toFixed(1) : '—';
+  document.getElementById('funnel-note').textContent =
+    `Contact→Engagement ${c2e}%  ·  Contact→Payment ${c2p}%  ·  Contact→Plan ${c2pl}%  ·  Avg days to first contact: ${fmt(r.avg_days_to_first_contact, 1)}d`;
+}
+
+function renderRecovery(data) {
+  if (!data || !data.length) return;
+  const r = data[0];
+  document.getElementById('kpi-recovered').textContent     = fmtEuro(r.total_recovered);
+  document.getElementById('kpi-recovery-rate').textContent = fmtPct(r.recovery_rate_pct);
+  document.getElementById('kpi-committed').textContent     = fmtPct(r.committed_rate_pct);
+  document.getElementById('kpi-avg-payment').textContent   = fmtEuro(r.avg_payment_48h, 2);
+  document.getElementById('kpi-avg-payment-sub').textContent = `${fmt(r.customers_paid_48h)} customers · ${fmt(r.customers_paid_7d)} paid within 7d`;
+}
+
+function renderPlans(data) {
+  if (!data || !data.length) return;
+  const r = data[0];
+  document.getElementById('kpi-plan-rate').textContent     = fmtPct(r.plan_setup_rate_pct);
+  document.getElementById('kpi-plan-sub').textContent      = `${fmt(r.plans_setup_post_call)} plans from ${fmt(r.dialled_customers)} dialled`;
+  document.getElementById('kpi-plans-active').textContent  = fmt(r.plans_active_finished);
+  document.getElementById('kpi-plans-active-sub').textContent = `of ${fmt(r.plans_setup_post_call)} plans set up post-call`;
+  document.getElementById('kpi-breakage').textContent      = fmtPct(r.plan_breakage_rate_pct);
+  document.getElementById('kpi-breakage-sub').textContent  = `${fmt(r.plans_broken)} broken — early stage`;
+}
+
+function renderSegmentation(data) {
+  if (!data || !data.length) return;
+  const max = Math.max(...data.map(r => parseFloat(r.contact_rate_pct) || 0));
+  document.getElementById('segmentation-table-body').innerHTML = data.map(r => `
+    <tr>
+      <td style="font-weight:500">${r.debt_band}</td>
+      <td class="td-muted">${fmt(r.dialled_customers)}</td>
+      <td class="td-muted">${fmt(r.contacted)}</td>
+      <td class="td-mono">${fmtPct(r.contact_rate_pct)}</td>
+      <td>
+        <div class="bar-track" style="height:5px">
+          <div class="bar-fill" style="width:${((parseFloat(r.contact_rate_pct)||0)/max*100).toFixed(1)}%;background:var(--teal)"></div>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+function renderChannel(data) {
+  if (!data || !data.length) return;
+  const r = data[0];
+  document.getElementById('kpi-portal-visit').textContent  = fmtPct(r.portal_visit_rate_pct);
+  document.getElementById('kpi-portal-visit-sub').textContent = `${fmt(r.portal_visit_after_call)} of ${fmt(r.dialled_customers)} dialled customers`;
+  document.getElementById('kpi-inbound').textContent       = fmtPct(r.inbound_response_rate_pct);
+  document.getElementById('kpi-inbound-sub').textContent   = `${fmt(r.inbound_after_call)} customers messaged / called back`;
+}
+
+// ─────────────────────────────────────────────
+// MAIN LOAD
+// ─────────────────────────────────────────────
+async function loadAllData() {
+  const btn = document.querySelector('.refresh-btn');
+  btn.classList.add('spinning');
+
+  document.getElementById('loading-screen').style.display = 'flex';
+  document.getElementById('error-screen').style.display   = 'none';
+  document.getElementById('main-content').style.display   = 'none';
+
+  const missing = [];
+
+  async function load(key) {
+    try {
+      const data = await fetchCSV(CSV_FILES[key]);
+      document.getElementById('loading-sub').textContent = `Loading ${CSV_FILES[key]}…`;
+      return data;
+    } catch(e) {
+      missing.push(CSV_FILES[key]);
+      return null;
+    }
+  }
+
+  const [activity, scheduled, contact, best_times, funnel, recovery, plans, segmentation, channel] = await Promise.all([
+    load('activity'), load('scheduled'), load('contact'), load('best_times'),
+    load('funnel'), load('recovery'), load('plans'), load('segmentation'), load('channel')
+  ]);
+
+  if (missing.length === Object.keys(CSV_FILES).length) {
+    document.getElementById('loading-screen').style.display = 'none';
+    document.getElementById('error-screen').style.display   = 'flex';
+    document.getElementById('error-file-list').innerHTML =
+      Object.values(CSV_FILES).map(f => f).join('\n');
+    btn.classList.remove('spinning');
+    return;
+  }
+
+  // Render all sections
+  if (activity)      renderActivity(activity);
+  if (scheduled)     renderScheduled(scheduled);
+  if (contact)       renderContact(contact);
+  if (best_times)    renderBestTimes(best_times);
+  if (funnel)        renderFunnel(funnel);
+  if (recovery)      renderRecovery(recovery);
+  if (plans)         renderPlans(plans);
+  if (segmentation)  renderSegmentation(segmentation);
+  if (channel)       renderChannel(channel);
+
+  document.getElementById('loading-screen').style.display = 'none';
+  document.getElementById('main-content').style.display   = 'block';
+  btn.classList.remove('spinning');
+}
+
+// Auto-load on page open
+loadAllData();
+</script>
+</body>
+</html>
