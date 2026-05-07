@@ -1,2 +1,2 @@
-total_calls,unique_customers_called,dialling_coverage_pct,avg_attempts_per_customer,active_agents,avg_calls_per_day
-23831,6642,7.83,3.59,30,1191.6
+total_calls,total_scheduled,calls_per_scheduled_pct,unique_customers_called,avg_attempts_per_customer,avg_calls_per_day,days_active,dialling_coverage_pct,active_agents
+23834,32900,72.44,6645,3.59,1986.2,12,7.32,31
