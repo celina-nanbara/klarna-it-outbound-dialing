@@ -1,2 +1,2 @@
-total_recovered,total_debt,recovery_rate_pct,committed_rate_pct,customers_paid_48h,avg_payment_48h,customers_paid_7d,avg_payment_7d
-68953.50,1207366.37,5.71,11.74,43,135.92,130,128.96
+total_recovered,customers_paid_48h,avg_payment_48h,customers_paid_7d,avg_payment_7d
+72265.77,44,136.02,133,128.09
