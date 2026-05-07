@@ -365,7 +365,7 @@ function fmtPct(n) {
   return parseFloat(n).toFixed(1) + '%';
 }
 async function fetchCSV(filename) {
-  const response = await fetch(filename);
+  const response = await fetch(filename + (filename.includes("?") ? "&" : "?") + "v=" + Date.now());
   if (!response.ok) throw new Error(`${filename} not found`);
   const text = await response.text();
   return new Promise((resolve, reject) => {
