@@ -69,6 +69,7 @@ main { padding: 32px 40px 60px; max-width: 1400px; margin: 0 auto; }
 .kpi-accent-amber .kpi-value { color: var(--amber); }
 .kpi-accent-blue .kpi-value { color: var(--blue); }
 .kpi-accent-coral .kpi-value { color: var(--coral); }
+.kpi-accent-purple .kpi-value { color: var(--purple); }
 /* GRIDS */
 .grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .grid-3col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
@@ -219,7 +220,7 @@ tbody tr:hover td { background: rgba(15,23,42,0.025); }
     </div>
     <div class="grid-2col">
       <div class="kpi-grid kpi-grid-2" style="gap:12px">
-        <div class="kpi kpi-accent-coral"><div class="kpi-label">Total debts removed</div><div class="kpi-value" id="kpi-removals-total">—</div><div class="kpi-sub" id="kpi-removals-sub">—</div></div>
+        <div class="kpi kpi-accent-purple"><div class="kpi-label">Total debts removed</div><div class="kpi-value" id="kpi-removals-total">—</div><div class="kpi-sub" id="kpi-removals-sub">—</div></div>
         <div class="kpi"><div class="kpi-label">Avg per export day</div><div class="kpi-value" id="kpi-removals-avg">—</div><div class="kpi-sub">since 15 Apr</div></div>
         <div class="kpi"><div class="kpi-label">Most recent export</div><div class="kpi-value" id="kpi-removals-latest">—</div><div class="kpi-sub" id="kpi-removals-latest-sub">—</div></div>
         <div class="kpi"><div class="kpi-label">Export days tracked</div><div class="kpi-value" id="kpi-removals-days">—</div><div class="kpi-sub">since initiative start</div></div>
@@ -365,7 +366,7 @@ function fmtPct(n) {
   return parseFloat(n).toFixed(1) + '%';
 }
 async function fetchCSV(filename) {
-  const response = await fetch(filename + (filename.includes("?") ? "&" : "?") + "v=" + Date.now());
+  const response = await fetch(filename);
   if (!response.ok) throw new Error(`${filename} not found`);
   const text = await response.text();
   return new Promise((resolve, reject) => {
@@ -415,6 +416,15 @@ function renderScheduled(data) {
   let hasMissing = false;
   let html = '';
   let totalScheduled = 0, totalCalls = 0, totalUnique = 0;
+  // Filter out weekend rows (Sat/Sun) from both the table and the totals
+  const weekday = row => {
+    if (!row || !row.schedule_date) return false;
+    const d = new Date(String(row.schedule_date) + 'T00:00:00');
+    if (isNaN(d.getTime())) return true;
+    const dow = d.getDay();
+    return dow !== 0 && dow !== 6;
+  };
+  data = data.filter(weekday);
   data.forEach(row => {
     const pct = row.total_calls && row.scheduled_cases ? ((row.total_calls / row.scheduled_cases) * 100).toFixed(1) + '%' : '—';
     const calls = row.total_calls || 0;
@@ -464,7 +474,7 @@ function renderRemovals(data) {
   document.getElementById('removals-bars').innerHTML = recent.map(r => `
     <div class="bar-row">
       <div class="bar-label td-mono">${r.removal_date}</div>
-      ${barHtml(((parseFloat(r.debts_removed)||0) / max) * 100, 'var(--coral)')}
+      ${barHtml(((parseFloat(r.debts_removed)||0) / max) * 100, 'var(--purple)')}
       <div class="bar-val">${fmt(r.debts_removed)}</div>
     </div>`).join('');
   document.getElementById('removals-note').textContent = `Daily count of debts cancelled from the Genesys call list (intrum_silver.phone_prioritisation_removal_it). Latest export: ${latest.removal_date || '—'}.`;
