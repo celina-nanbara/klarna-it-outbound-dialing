@@ -1,4 +1,4 @@
-schedule_date,scheduled_cases,total_calls,unique_customers_called,calls_per_scheduled_pct
+schedule_date,scheduled_cases,total_calls,unique_customers,calls_per_scheduled_pct
 2026-04-15,800,1323,800,165.4
 2026-04-16,949,1538,949,162.1
 2026-04-17,1000,1723,1001,172.3
