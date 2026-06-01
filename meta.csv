@@ -1,0 +1,14 @@
+filename,status,summary
+last_refreshed_at,info,2026-06-01T07:15:39.153Z
+bronze_max_file_date,info,2026-05-29 (within 5d - OK)
+silver_max_created_at,info,2026-05-29T14:59:57.328Z
+q1_activity.csv,updated,total_calls=53372;coverage=16.90%;FLAG total_scheduled 75185->12777 & calls_per_scheduled 68.39->417.7 & days_active 28->45 (def change)
+q2_scheduled.csv,updated,33 rows
+q3_contact.csv,updated,contact_rate=13.27%;rpc_rate=13.22%;voicemail_rate=17.76%
+q4_funnel.csv,updated,dialled=10262;contacted=4130;paid=689;plan=442
+q5_recovery.csv,updated,recovered=221378.44;rec_rate=11.92%;paid48h=95 (was 90 - OK no drop)
+q6_plans.csv,updated,setup_rate=4.31%;breakage=23.53%
+q7_best_times.csv,updated,46 rows
+q8_segmentation.csv,updated,5 rows
+q9_channel.csv,updated,portal_rate=11.58%;inbound_rate=5.84%
+q10_removals.csv,updated,28 rows
