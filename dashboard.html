@@ -107,6 +107,7 @@ tbody tr:hover td { background: rgba(15,23,42,0.025); }
 .funnel-pct { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-3); width: 42px; flex-shrink: 0; }
 /* NOTE */
 .note { font-size: 11px; color: var(--text-3); margin-top: 12px; font-style: italic; line-height: 1.6; }
+.def-note { font-size: 11px; color: var(--text-3); margin-top: -4px; margin-bottom: 14px; font-style: italic; line-height: 1.5; }
 .alert-warn { background: rgba(217,119,6,0.06); border-left: 3px solid var(--amber); padding: 10px 14px; font-size: 12px; color: var(--amber); border-radius: 0 6px 6px 0; margin-top: 12px; line-height: 1.6; }
 /* LOADING */
 #loading-screen { position: fixed; inset: 0; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; gap: 20px; }
@@ -242,11 +243,13 @@ tbody tr:hover td { background: rgba(15,23,42,0.025); }
     <div class="grid-2col">
       <div class="card">
         <div class="card-title">Call disposition (from bronze wrapup codes)</div>
+        <div class="def-note">Contact rate = answered call events ÷ total call attempts. Counts events, not unique customers (bronze data, lags ~11 days).</div>
         <div class="bar-list" id="contact-bars"></div>
         <div class="note" id="contact-note">—</div>
       </div>
       <div class="card">
         <div class="card-title">Best contact windows (min. 30 calls)</div>
+        <div class="def-note">Hours shown in Europe/Rome local time (CEST in summer, CET in winter). Top 5 hour×day buckets by contact rate.</div>
         <div class="bar-list" id="best-times-bars"></div>
         <div class="note">Contact rate by hour and day. Top 5 shown.</div>
       </div>
@@ -261,6 +264,7 @@ tbody tr:hover td { background: rgba(15,23,42,0.025); }
     </div>
     <div class="card">
       <div class="card-title">Klarna Italy dialled customers</div>
+      <div class="def-note">Contacted = unique customers reached at least once during the period (silver data, lags ~3 days).</div>
       <div class="funnel-list" id="funnel-rows"></div>
       <div class="note" id="funnel-note">—</div>
     </div>
@@ -272,11 +276,18 @@ tbody tr:hover td { background: rgba(15,23,42,0.025); }
       <span class="section-label">💰 Recovery & financial impact</span>
       <div class="section-line"></div>
     </div>
+    <div class="def-note">Lifetime recovered = total successful payments these customers have ever made on the debt (not just post-call). For causal uplift attributable to dialling, see the matched-ATT figures in the management report.</div>
     <div class="kpi-grid kpi-grid-4">
-      <div class="kpi kpi-accent-teal"><div class="kpi-label">Total recovered (dialled)</div><div class="kpi-value" id="kpi-recovered">—</div><div class="kpi-sub">payments table · all dialled customers</div></div>
-      <div class="kpi"><div class="kpi-label">Recovery rate (dialled)</div><div class="kpi-value" id="kpi-recovery-rate">—</div><div class="kpi-sub">all dialled customers</div></div>
-      <div class="kpi kpi-accent-blue"><div class="kpi-label">Committed rate (dialled)</div><div class="kpi-value" id="kpi-committed">—</div><div class="kpi-sub">incl. scheduled future payments</div></div>
+      <div class="kpi kpi-accent-teal"><div class="kpi-label">Lifetime recovered (all dialled)</div><div class="kpi-value" id="kpi-recovered">—</div><div class="kpi-sub">all customers called at least once</div></div>
+      <div class="kpi"><div class="kpi-label">Recovery rate (all dialled)</div><div class="kpi-value" id="kpi-recovery-rate">—</div><div class="kpi-sub">money-weighted, all dialled</div></div>
+      <div class="kpi kpi-accent-blue"><div class="kpi-label">Committed rate (all dialled)</div><div class="kpi-value" id="kpi-committed">—</div><div class="kpi-sub">incl. scheduled future payments</div></div>
       <div class="kpi"><div class="kpi-label">Avg payment (48h post-call)</div><div class="kpi-value" id="kpi-avg-payment">—</div><div class="kpi-sub" id="kpi-avg-payment-sub">—</div></div>
+    </div>
+    <div class="kpi-grid kpi-grid-4" style="margin-top: 12px;">
+      <div class="kpi kpi-accent-teal"><div class="kpi-label">Lifetime recovered (contacted)</div><div class="kpi-value" id="kpi-recovered-contacted">—</div><div class="kpi-sub">customers reached at least once</div></div>
+      <div class="kpi"><div class="kpi-label">Recovery rate (contacted)</div><div class="kpi-value" id="kpi-recovery-rate-contacted">—</div><div class="kpi-sub">money-weighted, contacted only</div></div>
+      <div class="kpi kpi-accent-blue"><div class="kpi-label">Committed rate (contacted)</div><div class="kpi-value" id="kpi-committed-contacted">—</div><div class="kpi-sub">incl. scheduled future payments</div></div>
+      <div class="kpi"><div class="kpi-label">Customers contacted</div><div class="kpi-value" id="kpi-contacted-customers">—</div><div class="kpi-sub">unique reached · subset of dialled</div></div>
     </div>
   </div>
 
@@ -541,11 +552,18 @@ function renderFunnel(data) {
 function renderRecovery(data) {
   if (!data || !data.length) return;
   const r = data[0];
+  // Dialled (all customers called at least once)
   document.getElementById('kpi-recovered').textContent = fmtEuro(r.total_recovered);
   document.getElementById('kpi-recovery-rate').textContent = fmtPct(r.recovery_rate_pct);
   document.getElementById('kpi-committed').textContent = fmtPct(r.committed_rate_pct);
   document.getElementById('kpi-avg-payment').textContent = fmtEuro(r.avg_payment_48h, 2);
   document.getElementById('kpi-avg-payment-sub').textContent = `${fmt(r.customers_paid_48h)} customers · ${fmt(r.customers_paid_7d)} paid within 7d`;
+  // Contacted (subset of dialled — reached at least once). Null-safe fallback while pending refresh.
+  const hasNum = v => v !== undefined && v !== null && v !== '';
+  document.getElementById('kpi-recovered-contacted').textContent = hasNum(r.total_recovered_contacted) ? fmtEuro(r.total_recovered_contacted) : '—';
+  document.getElementById('kpi-recovery-rate-contacted').textContent = hasNum(r.recovery_rate_contacted_pct) ? fmtPct(r.recovery_rate_contacted_pct) : '—';
+  document.getElementById('kpi-committed-contacted').textContent = hasNum(r.committed_rate_contacted_pct) ? fmtPct(r.committed_rate_contacted_pct) : '—';
+  document.getElementById('kpi-contacted-customers').textContent = hasNum(r.contacted_customers) ? fmt(r.contacted_customers) : '—';
 }
 
 function renderPlans(data) {
