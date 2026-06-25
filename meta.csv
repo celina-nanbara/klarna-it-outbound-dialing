@@ -1,14 +1,14 @@
 filename,status,summary
-last_refreshed_at,info,2026-06-24T08:33:00Z
-bronze_max_file_date,info,2026-06-22
-silver_max_created_at,info,2026-06-24
-q1_activity.csv,updated,total_calls=82778 unique_customers=11765 coverage=19.35%
-q2_scheduled.csv,updated,49 rows latest=2026-06-24
-q3_contact.csv,updated,total_calls=63698 contact_rate=12.48%
-q4_funnel.csv,updated,dialled=11765 contacted=5180
-q5_recovery.csv,updated,total_recovered=351480.42 recovery_rate=16.12% customers_paid_48h=109
-q6_plans.csv,updated,dialled=11765 plans_setup=587 breakage=29.30%
-q7_best_times.csv,updated,46 rows best=Fri19h 23.11%
-q8_segmentation.csv,updated,5 rows top-band=500-1k 57.17%
-q9_channel.csv,updated,dialled=11765 portal_visit_rate=13.74%
-q10_removals.csv,updated,44 rows latest=2026-06-24
+last_refreshed_at,info,2026-06-25T07:00:00Z
+bronze_max_file_date,info,2026-06-24
+silver_max_created_at,info,2026-06-25
+q1_activity.csv,updated,total_calls=83999 unique_customers=11770 dialling_coverage=19.43%
+q2_scheduled.csv,updated,50 rows (through 2026-06-25)
+q3_contact.csv,updated,total_calls=64919 contact_rate=12.34% rpc_rate=12.31%
+q4_funnel.csv,updated,dialled=11770 contacted=5199 paid_post_contact=1054
+q5_recovery.csv,updated,total_recovered=356519.25 recovery_rate=16.34% customers_paid_48h=111
+q6_plans.csv,updated,plans_setup=592 plan_setup_rate=5.03% breakage_rate=29.73%
+q7_best_times.csv,updated,46 rows (CEST local time) top slot Fri 19:00 23.11%
+q8_segmentation.csv,updated,5 bands contact_rate range 30.01-57.17%
+q9_channel.csv,updated,portal_visit_rate=13.93% inbound_response_rate=6.21%
+q10_removals.csv,updated,45 rows (through 2026-06-25) latest=1022
