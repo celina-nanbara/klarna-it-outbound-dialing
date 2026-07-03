@@ -1,14 +1,14 @@
 filename,status,summary
-last_refreshed_at,info,2026-07-01T07:00:00Z
-bronze_max_file_date,info,UNAVAILABLE
-silver_max_created_at,info,UNAVAILABLE
-q1_activity.csv,failed,Databricks SQL MCP unavailable in session
-q2_scheduled.csv,failed,Databricks SQL MCP unavailable in session
-q3_contact.csv,failed,Databricks SQL MCP unavailable in session
-q4_funnel.csv,failed,Databricks SQL MCP unavailable in session
-q5_recovery.csv,failed,Databricks SQL MCP unavailable in session
-q6_plans.csv,failed,Databricks SQL MCP unavailable in session
-q7_best_times.csv,failed,Databricks SQL MCP unavailable in session
-q8_segmentation.csv,failed,Databricks SQL MCP unavailable in session
-q9_channel.csv,failed,Databricks SQL MCP unavailable in session
-q10_removals.csv,failed,Databricks SQL MCP unavailable in session
+last_refreshed_at,info,2026-07-03T08:37:11Z
+bronze_max_file_date,info,2026-07-21
+silver_max_created_at,info,2026-07-02T12:45:53Z
+q1_activity.csv,updated,total_calls=89129 unique_customers=12239 coverage=21.54pct
+q2_scheduled.csv,updated,56 rows through 2026-07-03
+q3_contact.csv,updated,total_calls=70049 contact_rate=12.33pct rpc_rate=12.30pct
+q4_funnel.csv,updated,dialled=12239 contacted=5446 paid_post_contact=1145
+q5_recovery.csv,updated,total_recovered=390214.03 recovery_rate=17.39pct contacted_customers=5446
+q6_plans.csv,updated,plans_setup=626 plan_setup_rate=5.11pct breakage_rate=30.03pct
+q7_best_times.csv,updated,46 rows best_hour=19_Friday_23.11pct
+q8_segmentation.csv,updated,5 rows top_band=500-1k_58.32pct
+q9_channel.csv,updated,dialled=12239 portal_visit_rate=14.70pct inbound_rate=6.42pct
+q10_removals.csv,updated,51 rows through 2026-07-03
