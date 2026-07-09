@@ -1,14 +1,14 @@
 filename,status,summary
-last_refreshed_at,info,2026-07-07T08:34:18Z
-bronze_max_file_date,info,2026-07-31
-silver_max_created_at,info,2026-07-03T15:00:02Z
-q1_activity.csv,updated,total_calls=90746 unique_customers=12241 coverage=20.98pct
-q2_scheduled.csv,updated,58 rows through 2026-07-07
-q3_contact.csv,updated,total_calls=71666 contact_rate=12.27pct rpc_rate=12.24pct
-q4_funnel.csv,updated,dialled=12241 contacted=5472 paid_post_contact=1176
-q5_recovery.csv,updated,total_recovered=401015.49 recovery_rate=17.87pct contacted_customers=5472
-q6_plans.csv,updated,plans_setup=635 plan_setup_rate=5.19pct breakage_rate=34.33pct
-q7_best_times.csv,updated,46 rows best_hour=19_Friday_23.11pct
-q8_segmentation.csv,updated,5 rows top_band=500-1k_58.84pct
-q9_channel.csv,updated,dialled=12241 portal_visit_rate=15.04pct inbound_rate=6.53pct
-q10_removals.csv,updated,53 rows through 2026-07-07
+last_refreshed_at,info,2026-07-09T08:52:52Z
+bronze_max_file_date,info,unknown - queries not run this session
+silver_max_created_at,info,unknown - queries not run this session
+q1_activity.csv,failed,Databricks SQL MCP connector not available in this session
+q2_scheduled.csv,failed,Databricks SQL MCP connector not available in this session
+q3_contact.csv,failed,Databricks SQL MCP connector not available in this session
+q4_funnel.csv,failed,Databricks SQL MCP connector not available in this session
+q5_recovery.csv,failed,Databricks SQL MCP connector not available in this session
+q6_plans.csv,failed,Databricks SQL MCP connector not available in this session
+q7_best_times.csv,failed,Databricks SQL MCP connector not available in this session
+q8_segmentation.csv,failed,Databricks SQL MCP connector not available in this session
+q9_channel.csv,failed,Databricks SQL MCP connector not available in this session
+q10_removals.csv,failed,Databricks SQL MCP connector not available in this session
