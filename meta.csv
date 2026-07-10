@@ -1,14 +1,14 @@
 filename,status,summary
-last_refreshed_at,info,2026-07-09T08:52:52Z
+last_refreshed_at,info,2026-07-10T00:00:00Z
 bronze_max_file_date,info,unknown - queries not run this session
 silver_max_created_at,info,unknown - queries not run this session
-q1_activity.csv,failed,Databricks SQL MCP connector not available in this session
-q2_scheduled.csv,failed,Databricks SQL MCP connector not available in this session
-q3_contact.csv,failed,Databricks SQL MCP connector not available in this session
-q4_funnel.csv,failed,Databricks SQL MCP connector not available in this session
-q5_recovery.csv,failed,Databricks SQL MCP connector not available in this session
-q6_plans.csv,failed,Databricks SQL MCP connector not available in this session
-q7_best_times.csv,failed,Databricks SQL MCP connector not available in this session
-q8_segmentation.csv,failed,Databricks SQL MCP connector not available in this session
-q9_channel.csv,failed,Databricks SQL MCP connector not available in this session
-q10_removals.csv,failed,Databricks SQL MCP connector not available in this session
+q1_activity.csv,failed,Databricks SQL MCP connector not available in this session (2nd consecutive day)
+q2_scheduled.csv,failed,Databricks SQL MCP connector not available in this session (2nd consecutive day)
+q3_contact.csv,failed,Databricks SQL MCP connector not available in this session (2nd consecutive day)
+q4_funnel.csv,failed,Databricks SQL MCP connector not available in this session (2nd consecutive day)
+q5_recovery.csv,failed,Databricks SQL MCP connector not available in this session (2nd consecutive day)
+q6_plans.csv,failed,Databricks SQL MCP connector not available in this session (2nd consecutive day)
+q7_best_times.csv,failed,Databricks SQL MCP connector not available in this session (2nd consecutive day)
+q8_segmentation.csv,failed,Databricks SQL MCP connector not available in this session (2nd consecutive day)
+q9_channel.csv,failed,Databricks SQL MCP connector not available in this session (2nd consecutive day)
+q10_removals.csv,failed,Databricks SQL MCP connector not available in this session (2nd consecutive day)
