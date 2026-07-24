@@ -1,14 +1,14 @@
 filename,status,summary
-last_refreshed_at,info,2026-07-22T08:17:04Z
-bronze_max_file_date,info,unavailable - Databricks connector error
-silver_max_created_at,info,unavailable - Databricks connector error
-q1_activity.csv,failed,Databricks SQL MCP unavailable (endpoint Not Found / needs reconnect)
-q2_scheduled.csv,failed,Databricks SQL MCP unavailable (endpoint Not Found / needs reconnect)
-q3_contact.csv,failed,Databricks SQL MCP unavailable (endpoint Not Found / needs reconnect)
-q4_funnel.csv,failed,Databricks SQL MCP unavailable (endpoint Not Found / needs reconnect)
-q5_recovery.csv,failed,Databricks SQL MCP unavailable (endpoint Not Found / needs reconnect)
-q6_plans.csv,failed,Databricks SQL MCP unavailable (endpoint Not Found / needs reconnect)
-q7_best_times.csv,failed,Databricks SQL MCP unavailable (endpoint Not Found / needs reconnect)
-q8_segmentation.csv,failed,Databricks SQL MCP unavailable (endpoint Not Found / needs reconnect)
-q9_channel.csv,failed,Databricks SQL MCP unavailable (endpoint Not Found / needs reconnect)
-q10_removals.csv,failed,Databricks SQL MCP unavailable (endpoint Not Found / needs reconnect)
+last_refreshed_at,info,2026-07-24T08:28:58Z
+bronze_max_file_date,info,2026-07-31 (future-dated in source table - flagged as data quality anomaly, not a staleness issue)
+silver_max_created_at,info,2026-07-23T11:47:07.842Z
+q1_activity.csv,updated,109824 calls / 13006 customers / 21.98% coverage
+q2_scheduled.csv,updated,71 rows through 2026-07-24
+q3_contact.csv,updated,86960 calls / 11.97% contact rate (bronze)
+q4_funnel.csv,updated,13006 dialled / 6006 contacted / 30.9 avg days to contact
+q5_recovery.csv,updated,EUR 475757.04 recovered / 19.89% recovery rate / 122 paid in 48h
+q6_plans.csv,updated,704 plans setup / 35.51% breakage rate
+q7_best_times.csv,updated,46 rows (Europe/Rome local hours)
+q8_segmentation.csv,updated,5 debt bands
+q9_channel.csv,updated,13006 dialled / 16.14% portal visit rate
+q10_removals.csv,updated,66 rows through 2026-07-24
