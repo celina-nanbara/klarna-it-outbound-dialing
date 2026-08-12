@@ -1,14 +1,14 @@
 filename,status,summary
-last_refreshed_at,info,2026-08-11T08:46:41Z
-bronze_max_file_date,info,unavailable_no_databricks_connector
-silver_max_created_at,info,unavailable_no_databricks_connector
-q1_activity.csv,failed,no_databricks_sql_mcp_connector_in_session
-q2_scheduled.csv,failed,no_databricks_sql_mcp_connector_in_session
-q3_contact.csv,failed,no_databricks_sql_mcp_connector_in_session
-q4_funnel.csv,failed,no_databricks_sql_mcp_connector_in_session
-q5_recovery.csv,failed,no_databricks_sql_mcp_connector_in_session
-q6_plans.csv,failed,no_databricks_sql_mcp_connector_in_session
-q7_best_times.csv,failed,no_databricks_sql_mcp_connector_in_session
-q8_segmentation.csv,failed,no_databricks_sql_mcp_connector_in_session
-q9_channel.csv,failed,no_databricks_sql_mcp_connector_in_session
-q10_removals.csv,failed,no_databricks_sql_mcp_connector_in_session
+last_refreshed_at,info,2026-08-12T08:06:03.998Z
+bronze_max_file_date,info,2026-08-31 (future-dated - flagged, see summary)
+silver_max_created_at,info,2026-08-11T13:53:04.973Z
+q1_activity.csv,updated,total_calls=130581;unique_customers=13738;coverage=22.19pct
+q2_scheduled.csv,updated,84 rows through 2026-08-12
+q3_contact.csv,updated,total_calls=102497;contact_rate=10.96pct;bronze_source
+q4_funnel.csv,updated,dialled=13738;contacted=6376;paid_post_contact=1586
+q5_recovery.csv,updated,total_recovered=541474.75;recovery_rate=21.51pct;customers_paid_48h=135
+q6_plans.csv,updated,plans_setup=780;plan_setup_rate=5.68pct;breakage_rate=37.05pct
+q7_best_times.csv,updated,46 rows (prev 45; row-count delta expected, no anomaly)
+q8_segmentation.csv,updated,5 rows;contact_rate range 31.32-60.65pct
+q9_channel.csv,updated,dialled=13738;portal_visit_rate=17.14pct;inbound_response_rate=7.09pct
+q10_removals.csv,updated,79 rows through 2026-08-12
