@@ -1,14 +1,14 @@
 filename,status,summary
-last_refreshed_at,info,2026-09-30T07:17:50Z
-bronze_max_file_date,info,2026-09-29
-silver_max_created_at,info,2026-09-28T11:59:41.478Z
-q1_activity.csv,updated,160565 calls / 14940 unique customers / 40.59% coverage / 17839 scheduled
-q2_scheduled.csv,updated,119 rows through 2026-09-30
-q3_contact.csv,unchanged,129607 calls / 10.16% contact rate (bronze)
-q4_funnel.csv,updated,dialled 14940 / contacted 7055 / engaged 2781 / paid 1930 / plan 880
-q5_recovery.csv,updated,€683431.96 recovered / 24.29% recovery rate / 152 paid 48h / 433 paid 7d
-q6_plans.csv,updated,880 plans post-call / 5.89% setup / 36.36% breakage
-q7_best_times.csv,unchanged,46 rows
-q8_segmentation.csv,unchanged,5 rows
-q9_channel.csv,updated,2845 portal visits (19.04%) / 1309 inbound (8.76%)
-q10_removals.csv,updated,114 rows through 2026-09-30
+last_refreshed_at,info,2026-10-02T08:25:05Z
+bronze_max_file_date,info,2026-10-11 (future-dated vs today 2026-10-02 - check source)
+silver_max_created_at,info,2026-10-01T09:55:40Z
+q1_activity.csv,updated,160579 calls / 14940 customers / coverage 41.33%
+q2_scheduled.csv,updated,121 rows through 2026-10-02
+q3_contact.csv,updated,129621 calls / contact 10.16% / rpc 10.14%
+q4_funnel.csv,updated,dialled 14940 / contacted 7055 / paid 1935 / plans 888
+q5_recovery.csv,updated,recovered 687602.39 / 24.43% / paid_48h 152
+q6_plans.csv,updated,plans 888 (5.94%) / broken 320 (36.04%)
+q7_best_times.csv,updated,46 rows
+q8_segmentation.csv,updated,5 rows
+q9_channel.csv,updated,portal 19.18% / inbound 8.84%
+q10_removals.csv,updated,116 rows through 2026-10-02
