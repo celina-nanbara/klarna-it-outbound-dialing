@@ -18,8 +18,8 @@ call_hour,day_of_week,dow_num,total_calls,answered,contact_rate_pct
 10,Monday,2,5050,530,10.50
 10,Tuesday,3,3591,376,10.47
 13,Friday,6,4986,521,10.45
-11,Thursday,5,5530,571,10.33
 12,Tuesday,3,4094,422,10.31
+11,Thursday,5,5541,571,10.30
 13,Tuesday,3,3832,393,10.26
 16,Friday,6,2801,286,10.21
 15,Thursday,5,1978,200,10.11
@@ -38,7 +38,7 @@ call_hour,day_of_week,dow_num,total_calls,answered,contact_rate_pct
 15,Wednesday,4,4053,358,8.83
 12,Monday,2,7563,657,8.69
 16,Wednesday,4,2513,214,8.52
-9,Thursday,5,1970,161,8.17
+9,Thursday,5,1973,162,8.21
 15,Monday,2,2270,184,8.11
 9,Monday,2,2261,181,8.01
 14,Monday,2,4446,300,6.75
