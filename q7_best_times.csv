@@ -26,7 +26,7 @@ call_hour,day_of_week,dow_num,total_calls,answered,contact_rate_pct
 15,Thursday,5,1978,200,10.11
 12,Thursday,5,5445,545,10.01
 14,Friday,6,5603,546,9.74
-12,Friday,6,6561,637,9.71
+12,Friday,6,6950,662,9.53
 16,Monday,2,2656,250,9.41
 15,Tuesday,3,2213,208,9.40
 13,Monday,2,5488,512,9.33
