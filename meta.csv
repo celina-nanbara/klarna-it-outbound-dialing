@@ -1,14 +1,14 @@
 filename,status,summary
-last_refreshed_at,info,2026-10-12T09:24:21.797Z
-bronze_max_file_date,info,2026-10-21 (FUTURE-DATED vs run date 2026-10-12; suspect)
-silver_max_created_at,info,2026-10-09T10:59:46Z
-q1_activity.csv,updated,total_calls 163582; unique_customers 15304; coverage 44.38%
-q2_scheduled.csv,updated,127 rows
-q3_contact.csv,unchanged,131130 calls; contact_rate 10.20%
-q4_funnel.csv,updated,dialled 15304; contacted 7183; plan_post_contact 910
-q5_recovery.csv,updated,recovered 726968.94; paid_48h 157; paid_7d 448
-q6_plans.csv,updated,plans_setup 910; breakage 37.25%
-q7_best_times.csv,updated,46 rows
+last_refreshed_at,info,2026-10-13T07:20:00Z
+bronze_max_file_date,info,2026-10-21 (future-dated vs today 2026-10-13 - anomaly)
+silver_max_created_at,info,2026-10-12T15:00:07Z
+q1_activity.csv,updated,168134 calls / 15486 customers / 45.16% coverage
+q2_scheduled.csv,updated,128 rows
+q3_contact.csv,updated,135682 calls / contact 10.08%
+q4_funnel.csv,updated,dialled 15486 / contacted 7283
+q5_recovery.csv,updated,recovered 729585.49 / paid_48h 159
+q6_plans.csv,updated,919 plans / breakage 36.89%
+q7_best_times.csv,updated,46 rows (Europe/Rome hours)
 q8_segmentation.csv,updated,5 rows
-q9_channel.csv,updated,portal_visit 19.18%; inbound 8.87%
-q10_removals.csv,updated,122 rows
+q9_channel.csv,updated,portal 19.08% / inbound 8.81%
+q10_removals.csv,updated,123 rows
