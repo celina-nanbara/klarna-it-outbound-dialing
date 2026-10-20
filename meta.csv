@@ -1,14 +1,14 @@
 filename,status,summary
-last_refreshed_at,info,2026-10-15T08:56:39.209Z
-bronze_max_file_date,info,2026-10-21 (future-dated vs run date 2026-10-15 - check source)
-silver_max_created_at,info,2026-10-14T08:59:34Z
-q1_activity.csv,updated,169732 calls / 15512 customers / 46.33% coverage
-q2_scheduled.csv,updated,130 rows
-q3_contact.csv,updated,137280 calls / 10.06% contact rate
-q4_funnel.csv,updated,15512 dialled / 7311 contacted / 926 plans
-q5_recovery.csv,updated,742431.35 recovered / 25.27% / 165 paid 48h
-q6_plans.csv,updated,926 plans / 5.97% setup / 36.72% breakage
+last_refreshed_at,info,2026-10-20T09:01:19.120Z
+bronze_max_file_date,info,2026-10-21 (future-dated vs run date 2026-10-20 - not stale; check source)
+silver_max_created_at,info,2026-10-19T11:30:49.895Z (outbound calls)
+q1_activity.csv,updated,total_calls=174098; unique_customers=16273; coverage=47.16%
+q2_scheduled.csv,updated,133 rows
+q3_contact.csv,updated,total_calls=141646; contact_rate=10.05%; rpc=10.03%
+q4_funnel.csv,updated,dialled=16273; contacted=7541; paid_post_contact=2115
+q5_recovery.csv,updated,total_recovered=763396.62; customers_paid_48h=175; contacted=7541
+q6_plans.csv,updated,plans_setup=950 (5.84%); breakage=36.53%
 q7_best_times.csv,updated,46 rows
 q8_segmentation.csv,updated,5 rows
-q9_channel.csv,updated,2987 portal visits (19.26%) / 1374 inbound (8.86%)
-q10_removals.csv,updated,125 rows
+q9_channel.csv,updated,portal_visit=18.66%; inbound=8.59%
+q10_removals.csv,updated,128 rows
