@@ -1,14 +1,14 @@
 filename,status,summary
-last_refreshed_at,info,2026-10-22T07:15:28.764Z
-bronze_max_file_date,info,2026-10-21
+last_refreshed_at,info,2026-10-26T10:52:09.824Z
+bronze_max_file_date,info,2026-10-23
 silver_max_created_at,info,2026-10-21T13:45:47Z
-q1_activity.csv,updated,total_calls=178115; unique_customers=16286; coverage=47.89%
-q2_scheduled.csv,updated,135 rows
-q3_contact.csv,updated,total_calls=145663; contact_rate=10.01%; rpc=9.98%
-q4_funnel.csv,updated,dialled=16286; contacted=7619; paid_post_contact=2133
-q5_recovery.csv,updated,total_recovered=769284.17; customers_paid_48h=177; contacted=7619
-q6_plans.csv,updated,plans_setup=965; setup_rate=5.93%; breakage=35.44%
-q7_best_times.csv,updated,47 rows
-q8_segmentation.csv,updated,5 rows
-q9_channel.csv,updated,portal_visit=18.84%; inbound_response=8.66%
-q10_removals.csv,updated,130 rows
+q1_activity.csv,updated,total_calls 178115; coverage 46.74%; total_scheduled 19905
+q2_scheduled.csv,updated,137 rows
+q3_contact.csv,unchanged,contact_rate 10.01%
+q4_funnel.csv,updated,dialled 16286; contacted 7619; paid_post_contact 2158; plan_post_contact 976
+q5_recovery.csv,updated,total_recovered 778777.32; customers_paid_48h 177
+q6_plans.csv,updated,plans_setup 976; breakage 36.17%
+q7_best_times.csv,unchanged,47 rows
+q8_segmentation.csv,unchanged,5 rows
+q9_channel.csv,updated,portal_visit 18.97%; inbound 8.75%
+q10_removals.csv,updated,132 rows
