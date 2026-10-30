@@ -1,14 +1,14 @@
 filename,status,summary
-last_refreshed_at,info,2026-10-29T08:14:50.458Z
-bronze_max_file_date,info,2026-10-28
-silver_max_created_at,info,2026-10-28T14:00:11Z
-q1_activity.csv,updated,total_calls 181966; coverage 51.89%; total_scheduled 21653
-q2_scheduled.csv,updated,140 rows
-q3_contact.csv,updated,contact_rate 10.04%
-q4_funnel.csv,updated,dialled 17673; contacted 7924; paid_post_contact 2188; plan_post_contact 997
-q5_recovery.csv,updated,total_recovered 790097.95; customers_paid_48h 182
-q6_plans.csv,updated,plans_setup 997; breakage 35.51%
+last_refreshed_at,info,2026-10-30T09:58:00.000Z
+bronze_max_file_date,info,2026-10-29
+silver_max_created_at,info,2026-10-29T12:45:23Z
+q1_activity.csv,updated,total_calls 186230; coverage 57.38%; total_scheduled 22013
+q2_scheduled.csv,updated,141 rows
+q3_contact.csv,updated,contact_rate 10.08%
+q4_funnel.csv,updated,dialled 18994; contacted 8300; paid_post_contact 2212; plan_post_contact 1009
+q5_recovery.csv,updated,total_recovered 796741.07; customers_paid_48h 197
+q6_plans.csv,updated,plans_setup 1009; breakage 35.28%
 q7_best_times.csv,updated,47 rows
 q8_segmentation.csv,updated,5 rows
-q9_channel.csv,updated,portal_visit 17.78%; inbound 8.16%
-q10_removals.csv,updated,135 rows
+q9_channel.csv,updated,portal_visit 16.73%; inbound 7.69%
+q10_removals.csv,failed,commit blocked by permission denial (136 rows queried; max date 2026-10-30)
